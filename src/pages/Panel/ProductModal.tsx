@@ -35,6 +35,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
     const [currentTab, setCurrentTab] = useState(1)
     const [images, setImages] = useState<ExtFile[]>([])
     const [currentImages, setCurrentImages] = useState(current_product?.images || [])
+    const [cover, setCover] = useState<File>()
 
     const formik = useFormik<ProductForm>({
         initialValues: current_product
@@ -44,15 +45,20 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
                   code: "",
                   price: "",
                   description: "",
+                  cover: {},
                   images: [],
                   urls: []
               },
         onSubmit: (values) => {
             if (loading) return
-            if (!values.images.length) {
-                snackbar({ severity: "info", text: "envie pelo menos uma imagem" })
+            if (!values.cover.file && !current_product?.cover) {
+                snackbar({ severity: "warning", text: "envie uma imagem de capa" })
                 return
             }
+            // if (!values.images.length) {
+            //     snackbar({ severity: "warning", text: "envie pelo menos uma imagem" })
+            //     return
+            // }
 
             setLoading(true)
 
@@ -80,6 +86,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
         close()
         setImages([])
         setCurrentImages([])
+        setCover(undefined)
     }
 
     const onDelete = (product: Product) => {
@@ -161,7 +168,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
             <IconButton sx={{ position: "absolute", right: "3vw", top: "3vw" }} color="secondary" onClick={onClose}>
                 <Close />
             </IconButton>
-            <DialogTitle>novo produto</DialogTitle>
+            <DialogTitle>{current_product ? "editar produto" : "novo produto"}</DialogTitle>
             <DialogContent sx={{ maxWidth: "90vw" }}>
                 <Form onSubmit={formik.handleSubmit} sx={{ gap: "5vw", height: "100%" }}>
                     <Tabs value={currentTab} onChange={(_, value) => setCurrentTab(value)} variant="fullWidth">
@@ -177,6 +184,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
                             images={images}
                             setCurrentImages={setCurrentImages}
                             setImages={setImages}
+                            current_product={current_product}
+                            cover={cover}
+                            setCover={setCover}
                         />
                     )}
 

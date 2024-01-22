@@ -4,6 +4,7 @@ declare interface ProductForm {
     code: string
     price: string
     images: Image[]
+    cover: Image
     urls: string[]
 }
 
@@ -13,6 +14,8 @@ declare interface Product {
     description: string
     code: string
     price: number
+    cover: string
+
     images: Image[]
 }
 
