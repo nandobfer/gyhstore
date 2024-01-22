@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Autocomplete, Box, Button } from "@mui/material"
 import { useUser } from "../../hooks/useUser"
 import { TextField } from "../../components/TextField"
@@ -6,6 +6,7 @@ import { ProductModal } from "./ProductModal"
 import { Logo } from "../../components/Logo"
 import { useProduct } from "../../hooks/useProduct"
 import { ProductContainer } from "./ProductContainer"
+import { Search } from "@mui/icons-material"
 
 interface PanelProps {}
 
@@ -16,6 +17,7 @@ export const Panel: React.FC<PanelProps> = ({}) => {
 
     const [currentProduct, setCurrentProduct] = useState<Product>()
     const [openProductModal, setOpenProductModal] = useState(false)
+    const [filteredProductList, setFilteredProductList] = useState(product.list)
 
     const onNewProductClick = () => {
         setCurrentProduct(undefined)
@@ -32,22 +34,26 @@ export const Panel: React.FC<PanelProps> = ({}) => {
         setOpenProductModal(false)
     }
 
+    const onSearch = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const value = event.target.value
+        setFilteredProductList(product.list.filter((item) => item.code.includes(value) || item.name.includes(value)))
+        console.log(value)
+    }
+
+    useEffect(() => {
+        setFilteredProductList(product.list)
+    }, [product.list])
+
     return (
         <Box sx={{ padding: "10vw", paddingTop: "5vw", paddingBottom: "10vw", alignItems: "center" }}>
             <Logo size="25vw" />
             <Box sx={{ gap: "5vw", width: "100%" }}>
-                <Autocomplete
-                    disablePortal
-                    options={product.list}
-                    getOptionLabel={(option) => `${option.code} - ${option.name}`}
-                    renderInput={(params) => <TextField {...params} label="Produto" />}
-                    fullWidth
-                />
+                <TextField fullWidth label="produto" variant="standard" onChange={onSearch} InputProps={{ endAdornment: <Search /> }} />
                 <Button variant="outlined" sx={{ borderStyle: "dashed" }} onClick={onNewProductClick} fullWidth>
                     novo produto
                 </Button>
                 <Box sx={{ gap: "3vw", overflowY: "auto", maxHeight: "65vh" }}>
-                    {product.list
+                    {filteredProductList
                         .sort((a, b) => a.id - b.id)
                         .map((product) => (
                             <ProductContainer key={product.id} product={product} onClick={() => onProductClick(product)} />
