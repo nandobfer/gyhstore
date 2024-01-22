@@ -6,6 +6,7 @@ declare interface ProductForm {
     images: Image[]
     cover: Image
     urls: string[]
+    categories: number[]
 }
 
 declare interface Product {
@@ -17,6 +18,7 @@ declare interface Product {
     cover: string
 
     images: Image[]
+    categories: Category[]
 }
 
 declare interface Image {

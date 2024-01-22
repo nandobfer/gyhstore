@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom"
 import { MenuProvider } from "./contexts/menuContext"
 import { UserProvider } from "./contexts/userContext"
 import { ProductProvider } from "./contexts/productContext"
+import { CategoryProvider } from "./contexts/categoryContext"
 
 interface ProvidersProps {
     children?: React.ReactNode
@@ -25,7 +26,7 @@ export const Providers: React.FC<ProvidersProps> = ({ children }) => {
                             <MenuProvider>
                                 <UserProvider>
                                     <ProductProvider>
-                                        {children}
+                                        <CategoryProvider>{children}</CategoryProvider>
                                     </ProductProvider>
                                 </UserProvider>
                             </MenuProvider>

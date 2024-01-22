@@ -39,15 +39,22 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
 
     const formik = useFormik<ProductForm>({
         initialValues: current_product
-            ? { ...current_product, price: current_product?.price.toString().replace(".", ","), urls: [] }
+            ? {
+                  ...current_product,
+                  price: current_product?.price.toString().replace(".", ","),
+                  urls: [],
+                  cover: { id: 0, product_id: 0, url: current_product.cover },
+                  categories: current_product.categories.map((category) => category.id)
+              }
             : {
                   name: "",
                   code: "",
                   price: "",
                   description: "",
-                  cover: {},
+                  cover: { id: 0, product_id: 0, url: "" },
                   images: [],
-                  urls: []
+                  urls: [],
+                  categories: []
               },
         onSubmit: (values) => {
             if (loading) return
