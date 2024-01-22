@@ -42,9 +42,10 @@ section {
     flex-direction: column;
 }
 
-.MuiButton-root {
+.MuiButton-root, .MuiTab-root {
     text-transform: none!important;
 }
+
 
 .files-ui-dropzone-children-container {
     align-items: flex-start;

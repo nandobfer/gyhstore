@@ -39,10 +39,7 @@ export const Panel: React.FC<PanelProps> = ({}) => {
             <Box sx={{ gap: "5vw", width: "100%" }}>
                 <Autocomplete
                     disablePortal
-                    options={[
-                        { code: 1, name: "teste" },
-                        { code: 2, name: "cu" }
-                    ]}
+                    options={product.list}
                     getOptionLabel={(option) => `${option.code} - ${option.name}`}
                     renderInput={(params) => <TextField {...params} label="Produto" />}
                     fullWidth

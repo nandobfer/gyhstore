@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Grid, IconButton } from "@mui/material"
+import { Box, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Grid, IconButton, Tab, Tabs } from "@mui/material"
 import { useFormik } from "formik"
 import { Form } from "../../components/Form"
 import { TextField } from "../../components/TextField"
@@ -14,6 +14,8 @@ import { useConfirmDialog } from "burgos-confirm"
 import { getImageUrl } from "../../tools/getImageUrl"
 import { colors } from "../../style/colors"
 import { Close } from "@mui/icons-material"
+import { InfoTab } from "./InfoTab"
+import { GalleryTab } from "./GalleryTab"
 
 interface ProductModalProps {
     isOpen: boolean
@@ -24,13 +26,13 @@ interface ProductModalProps {
 
 export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, current_product }) => {
     const io = useIo()
-    const currency_mask = useCurrencyMask()
 
     const { update: updateProduct, remove } = useProduct()
     const { snackbar } = useSnackbar()
     const { confirm } = useConfirmDialog()
 
     const [loading, setLoading] = useState(false)
+    const [currentTab, setCurrentTab] = useState(1)
     const [images, setImages] = useState<ExtFile[]>([])
     const [currentImages, setCurrentImages] = useState(current_product?.images || [])
 
@@ -88,10 +90,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
                 io.emit("gyh:product:delete", product.id)
             }
         })
-    }
-
-    const deleteImage = (file: ExtFile) => {
-        setImages((list) => list.filter((item) => item.id != file.id))
     }
 
     const onProductUpdate = (product: Product) => {
@@ -156,7 +154,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
             }}
             PaperProps={{
                 sx: {
-                    minWidth: "90vw"
+                    minWidth: "90vw",
+                    height: "70vh"
                 }
             }}>
             <IconButton sx={{ position: "absolute", right: "3vw", top: "3vw" }} color="secondary" onClick={onClose}>
@@ -164,89 +163,24 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
             </IconButton>
             <DialogTitle>novo produto</DialogTitle>
             <DialogContent sx={{ maxWidth: "90vw" }}>
-                <Form onSubmit={formik.handleSubmit} sx={{ gap: "5vw" }}>
-                    <TextField label="nome" value={formik.values.name} name="name" onChange={formik.handleChange} required />
-                    <Grid container columns={2} spacing={2}>
-                        <Grid item xs={1}>
-                            <TextField label="código" value={formik.values.code} name="code" onChange={formik.handleChange} required />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <TextField
-                                label="preço"
-                                value={formik.values.price}
-                                name="price"
-                                onChange={formik.handleChange}
-                                required
-                                InputProps={{
-                                    inputComponent: MaskedInput,
-                                    inputProps: { mask: currency_mask, inputMode: "numeric" }
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
+                <Form onSubmit={formik.handleSubmit} sx={{ gap: "5vw", height: "100%" }}>
+                    <Tabs value={currentTab} onChange={(_, value) => setCurrentTab(value)} variant="fullWidth">
+                        <Tab label="informações" value={1} />
+                        <Tab label="galeria" value={2} />
+                    </Tabs>
 
-                    <TextField
-                        label="descrição"
-                        value={formik.values.description}
-                        name="description"
-                        onChange={formik.handleChange}
-                        required
-                        multiline
-                        minRows={3}
-                    />
+                    {currentTab === 1 && <InfoTab formik={formik} />}
+                    {currentTab === 2 && (
+                        <GalleryTab
+                            formik={formik}
+                            currentImages={currentImages}
+                            images={images}
+                            setCurrentImages={setCurrentImages}
+                            setImages={setImages}
+                        />
+                    )}
 
-                    <Box
-                        sx={{
-                            flexDirection: "row",
-                            gap: "5vw",
-                            padding: "5vw",
-                            borderRadius: "2vw",
-                            width: "100%",
-                            maxHeight: "50vw",
-                            minHeight: "50vw",
-                            overflowY: "auto",
-                            justifyContent: "flex-start",
-                            alignItems: "flex-start",
-                            display: "flex",
-                            outlineStyle: "dashed",
-                            outlineWidth: "0.5vw",
-                            flexWrap: "wrap"
-                        }}>
-                        {currentImages?.map((file) => (
-                            <Avatar
-                                key={file.url}
-                                src={getImageUrl(file.url)}
-                                style={{ width: "30vw", height: "30vw" }}
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    setCurrentImages(currentImages.filter((item) => item.id != file.id))
-                                }}
-                            />
-                        ))}
-                        {images.map((file) => (
-                            <FileMosaic
-                                key={file.id}
-                                {...file}
-                                preview
-                                valid={undefined}
-                                onDelete={() => deleteImage(file)}
-                                // info={true}
-                                darkMode
-                                style={{ width: "30vw", height: "30vw" }}
-                            />
-                        ))}
-                    </Box>
-                    <FileInputButton
-                        onChange={(files) => setImages((images) => [...images, ...files])}
-                        value={images}
-                        behaviour="replace"
-                        label="enviar imagem"
-                        accept="image/*"
-                        color={colors.secondary}
-                        style={{ width: "100%", padding: "2vw", color: colors.primary, textTransform: "none" }}
-                    />
-
-                    <Box sx={{ flexDirection: "row", gap: "5vw" }}>
+                    <Box sx={{ flexDirection: "row", gap: "5vw", marginTop: "auto" }}>
                         {current_product && (
                             <Button variant="outlined" color="error" fullWidth onClick={() => onDelete(current_product)}>
                                 excluir
