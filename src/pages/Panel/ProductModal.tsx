@@ -199,7 +199,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
 
                     <Box sx={{ flexDirection: "row", gap: "5vw", marginTop: "auto" }}>
                         {current_product && (
-                            <Button variant="outlined" color="error" fullWidth onClick={() => onDelete(current_product)}>
+                            <Button variant="outlined" color="secondary" fullWidth onClick={() => onDelete(current_product)}>
                                 excluir
                             </Button>
                         )}

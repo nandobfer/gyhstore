@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material"
 import { Form } from "../../components/Form"
 import { useFormik } from "formik"
 import { TextField } from "../../components/TextField"
@@ -8,6 +8,7 @@ import { getImageUrl } from "../../tools/getImageUrl"
 import { useIo } from "../../hooks/useIo"
 import { useCategory } from "../../hooks/useCategory"
 import { useSnackbar } from "burgos-snackbar"
+import { Close } from "@mui/icons-material"
 
 interface CategoryModalProps {
     isOpen: boolean
@@ -99,6 +100,9 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
                     minHeight: "45vh"
                 }
             }}>
+            <IconButton sx={{ position: "absolute", right: "3vw", top: "3vw" }} color="secondary" onClick={close}>
+                <Close />
+            </IconButton>
             <DialogTitle sx={{ paddingBottom: 0 }}>{current_category ? "editar categoria" : "nova categoria"}</DialogTitle>
             <Form onSubmit={formik.handleSubmit} sx={{ gap: "5vw" }}>
                 <DialogContent sx={{ paddingTop: 0 }}>
@@ -113,7 +117,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
                         />
                         <Box sx={{ width: "100%", flexDirection: "row", gap: "5vw" }}>
                             {current_category && (
-                                <Button variant="outlined" color="error">
+                                <Button variant="outlined" color="secondary">
                                     deletar
                                 </Button>
                             )}
