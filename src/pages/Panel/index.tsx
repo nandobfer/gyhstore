@@ -34,7 +34,7 @@ export const Panel: React.FC<PanelProps> = ({}) => {
     }
 
     return (
-        <Box sx={{ padding: "10vw", paddingTop: "5vw", paddingBottom: 0, alignItems: "center" }}>
+        <Box sx={{ padding: "10vw", paddingTop: "5vw", paddingBottom: "10vw", alignItems: "center" }}>
             <Logo size="25vw" />
             <Box sx={{ gap: "5vw", width: "100%" }}>
                 <Autocomplete
@@ -47,7 +47,7 @@ export const Panel: React.FC<PanelProps> = ({}) => {
                 <Button variant="outlined" sx={{ borderStyle: "dashed" }} onClick={onNewProductClick} fullWidth>
                     novo produto
                 </Button>
-                <Box sx={{}}>
+                <Box sx={{ gap: "3vw", overflowY: "auto", maxHeight: "65vh" }}>
                     {product.list
                         .sort((a, b) => a.id - b.id)
                         .map((product) => (

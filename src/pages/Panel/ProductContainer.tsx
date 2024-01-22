@@ -13,23 +13,34 @@ interface ProductContainerProps {
 export const ProductContainer:React.FC<ProductContainerProps> = ({ product, onClick }) => {
     
     return (
-        <MenuItem
-            sx={{ flexDirection: "row", padding: "0", gap: "5vw", alignItems: "flex-start", maxWidth: "90vw", maxHeight: "30vw" }}
+        <Box
+            sx={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+                maxWidth: "90vw",
+                height: "30vw",
+                overflow: "hidden"
+            }}
             onClick={onClick}>
-            <Avatar variant="rounded" src={getImageUrl(product.cover)} sx={{ width: "30vw", height: "auto" }}>
-                <BrokenImage />
-            </Avatar>
-            <Box sx={{ gap: "3vw", padding: "3vw 0" }}>
-                <Box sx={{ flexDirection: "row", gap: "2vw", alignItems: "center", maxWidth: "90vw" }}>
-                    {product.name}
+            <MenuItem
+                sx={{
+                    gap: "5vw",
+                    padding: "0",
+                    height: "100%"
+                }}>
+                <Avatar variant="rounded" src={getImageUrl(product.cover)} sx={{ width: "30vw", height: "30vw" }}>
+                    <BrokenImage />
+                </Avatar>
+                <Box sx={{ gap: "0vw", padding: "3vw 0", height: "100%" }}>
+                    <Box sx={{ flexDirection: "row", gap: "2vw", alignItems: "center", maxWidth: "90vw" }}>{product.name}</Box>
                     <Box sx={{ fontSize: "0.6rem", color: "secondary.main" }}>{product.code}</Box>
-                </Box>
 
-                <Box sx={{ fontSize: "0.8rem", whiteSpace: "break-spaces", width: "50vw", textOverflow: "ellipsis", overflow: "hidden" }}>
+                    {/* <Box sx={{ fontSize: "0.8rem", whiteSpace: "break-spaces", width: "50vw", textOverflow: "ellipsis", overflow: "hidden" }}>
                     {product.description.split("\n")[0]}
+                </Box> */}
+                    <CurrencyText value={product.price} style={{ marginTop: "auto", fontWeight: "bold" }} />
                 </Box>
-                <CurrencyText value={product.price} />
-            </Box>
-        </MenuItem>
+            </MenuItem>
+        </Box>
     )
 }
