@@ -25,7 +25,8 @@ export const ProductContainer:React.FC<ProductContainerProps> = ({ product, onCl
                 sx={{
                     gap: "5vw",
                     padding: "0",
-                    height: "100%"
+                    height: "100%",
+                    width: "100%"
                 }}>
                 <Avatar variant="rounded" src={getImageUrl(product.cover)} sx={{ width: "30vw", height: "30vw" }}>
                     <BrokenImage />
