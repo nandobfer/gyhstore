@@ -1,0 +1,263 @@
+import React, { useEffect, useState } from "react"
+import { Box, Button, CircularProgress, Dialog, DialogContent, DialogTitle, Grid, IconButton } from "@mui/material"
+import { useFormik } from "formik"
+import { Form } from "../../components/Form"
+import { TextField } from "../../components/TextField"
+import { Avatar, Dropzone, ExtFile, FileInputButton, FileMosaic } from "@files-ui/react"
+import { useIo } from "../../hooks/useIo"
+import { useProduct } from "../../hooks/useProduct"
+import { useSnackbar } from "burgos-snackbar"
+import MaskedInput from "../../components/MaskedInput"
+import masks from "../../tools/masks"
+import { useCurrencyMask } from "burgos-masks"
+import { useConfirmDialog } from "burgos-confirm"
+import { getImageUrl } from "../../tools/getImageUrl"
+import { colors } from "../../style/colors"
+import { Close } from "@mui/icons-material"
+
+interface ProductModalProps {
+    isOpen: boolean
+    close: () => void
+
+    current_product?: Product
+}
+
+export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, current_product }) => {
+    const io = useIo()
+    const currency_mask = useCurrencyMask()
+
+    const { update: updateProduct, remove } = useProduct()
+    const { snackbar } = useSnackbar()
+    const { confirm } = useConfirmDialog()
+
+    const [loading, setLoading] = useState(false)
+    const [images, setImages] = useState<ExtFile[]>([])
+    const [currentImages, setCurrentImages] = useState(current_product?.images || [])
+
+    const formik = useFormik<ProductForm>({
+        initialValues: current_product
+            ? { ...current_product, price: current_product?.price.toString().replace(".", ","), urls: [] }
+            : {
+                  name: "",
+                  code: "",
+                  price: "",
+                  description: "",
+                  images: [],
+                  urls: []
+              },
+        onSubmit: (values) => {
+            if (loading) return
+            if (!values.images.length) {
+                snackbar({ severity: "info", text: "envie pelo menos uma imagem" })
+                return
+            }
+
+            setLoading(true)
+
+            const data = {
+                ...values,
+                price: Number(
+                    values.price
+                        .replace(".", "")
+                        .replace(",", ".")
+                        .replace(/[^0-9\.]/g, "")
+                ),
+                urls: values.images.filter((item) => item.url).map((item) => item.url),
+                images: values.images.filter((item) => !item.url),
+
+                id: 0
+            }
+            console.log(data)
+
+            io.emit(current_product ? "gyh:product:update" : "gyh:product:create", data, current_product?.id)
+        },
+        enableReinitialize: true
+    })
+
+    const onClose = () => {
+        close()
+        setImages([])
+        setCurrentImages([])
+    }
+
+    const onDelete = (product: Product) => {
+        confirm({
+            title: "deletar produto",
+            content: "tem certeza que deseja deletar esse produto?",
+            onConfirm: () => {
+                io.emit("gyh:product:delete", product.id)
+            }
+        })
+    }
+
+    const deleteImage = (file: ExtFile) => {
+        setImages((list) => list.filter((item) => item.id != file.id))
+    }
+
+    const onProductUpdate = (product: Product) => {
+        onClose()
+        updateProduct(product)
+        formik.resetForm()
+    }
+
+    useEffect(() => {
+        const images_data: ImageForm[] = images.map((image) => ({ file: image.file!, name: image.name! }))
+
+        formik.setFieldValue("images", [...currentImages, ...images_data])
+    }, [images])
+
+    useEffect(() => {
+        io.on("gyh:product:create", (product?: Product) => {
+            if (product) {
+                onProductUpdate(product)
+                snackbar({ severity: "success", text: "produto adicionado" })
+            } else {
+                snackbar({ severity: "error", text: "erro ao adicionar produto" })
+            }
+            setLoading(false)
+        })
+
+        io.on("gyh:product:update:success", (product?: Product) => {
+            if (product) {
+                onProductUpdate(product)
+                snackbar({ severity: "info", text: "produto atualizado" })
+            } else {
+                snackbar({ severity: "error", text: "erro ao adicionar produto" })
+            }
+            setLoading(false)
+        })
+
+        io.on("gyh:product:delete:success", (product: Product) => {
+            onClose()
+            remove(product)
+        })
+
+        return () => {
+            io.off("gyh:product:create")
+            io.off("gyh:product:update:success")
+            io.off("gyh:product:delete:success")
+        }
+    }, [])
+
+    useEffect(() => {
+        if (current_product) setCurrentImages(current_product.images)
+    }, [current_product])
+
+    useEffect(() => {
+        formik.setFieldValue("images", currentImages)
+    }, [currentImages])
+
+    return (
+        <Dialog
+            open={isOpen}
+            onClose={onClose}
+            sx={{
+                justifyContent: "center"
+            }}
+            PaperProps={{
+                sx: {
+                    minWidth: "90vw"
+                }
+            }}>
+            <IconButton sx={{ position: "absolute", right: "3vw", top: "3vw" }} color="secondary" onClick={onClose}>
+                <Close />
+            </IconButton>
+            <DialogTitle>novo produto</DialogTitle>
+            <DialogContent sx={{ maxWidth: "90vw" }}>
+                <Form onSubmit={formik.handleSubmit} sx={{ gap: "5vw" }}>
+                    <TextField label="nome" value={formik.values.name} name="name" onChange={formik.handleChange} required />
+                    <Grid container columns={2} spacing={2}>
+                        <Grid item xs={1}>
+                            <TextField label="código" value={formik.values.code} name="code" onChange={formik.handleChange} required />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <TextField
+                                label="preço"
+                                value={formik.values.price}
+                                name="price"
+                                onChange={formik.handleChange}
+                                required
+                                InputProps={{
+                                    inputComponent: MaskedInput,
+                                    inputProps: { mask: currency_mask, inputMode: "numeric" }
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <TextField
+                        label="descrição"
+                        value={formik.values.description}
+                        name="description"
+                        onChange={formik.handleChange}
+                        required
+                        multiline
+                        minRows={3}
+                    />
+
+                    <Box
+                        sx={{
+                            flexDirection: "row",
+                            gap: "5vw",
+                            padding: "5vw",
+                            borderRadius: "2vw",
+                            width: "100%",
+                            maxHeight: "50vw",
+                            minHeight: "50vw",
+                            overflowY: "auto",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                            display: "flex",
+                            outlineStyle: "dashed",
+                            outlineWidth: "0.5vw",
+                            flexWrap: "wrap"
+                        }}>
+                        {currentImages?.map((file) => (
+                            <Avatar
+                                key={file.url}
+                                src={getImageUrl(file.url)}
+                                style={{ width: "30vw", height: "30vw" }}
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    setCurrentImages(currentImages.filter((item) => item.id != file.id))
+                                }}
+                            />
+                        ))}
+                        {images.map((file) => (
+                            <FileMosaic
+                                key={file.id}
+                                {...file}
+                                preview
+                                valid={undefined}
+                                onDelete={() => deleteImage(file)}
+                                // info={true}
+                                darkMode
+                                style={{ width: "30vw", height: "30vw" }}
+                            />
+                        ))}
+                    </Box>
+                    <FileInputButton
+                        onChange={(files) => setImages((images) => [...images, ...files])}
+                        value={images}
+                        behaviour="replace"
+                        label="enviar imagem"
+                        accept="image/*"
+                        color={colors.secondary}
+                        style={{ width: "100%", padding: "2vw", color: colors.primary, textTransform: "none" }}
+                    />
+
+                    <Box sx={{ flexDirection: "row", gap: "5vw" }}>
+                        {current_product && (
+                            <Button variant="outlined" color="error" fullWidth onClick={() => onDelete(current_product)}>
+                                excluir
+                            </Button>
+                        )}
+                        <Button variant="outlined" type="submit" fullWidth>
+                            {loading ? <CircularProgress size="1.5rem" color="primary" /> : current_product ? "salvar" : "criar"}
+                        </Button>
+                    </Box>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    )
+}
