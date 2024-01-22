@@ -4,7 +4,6 @@ import { useUser } from "../../hooks/useUser"
 import { TextField } from "../../components/TextField"
 import { ProductModal } from "./ProductModal"
 import { Logo } from "../../components/Logo"
-import { ProductList } from "./ProductList"
 import { useProduct } from "../../hooks/useProduct"
 import { ProductContainer } from "./ProductContainer"
 

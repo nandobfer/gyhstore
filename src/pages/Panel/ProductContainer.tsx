@@ -1,7 +1,6 @@
 import React from 'react'
 import {Avatar, Box, MenuItem} from '@mui/material'
-import { BrokenImage } from '@mui/icons-material'
-import { url } from '../../backend'
+import { BrokenImage } from "@mui/icons-material"
 import { getImageUrl } from '../../tools/getImageUrl'
 import { CurrencyText } from '../../components/CurrencyText'
 
