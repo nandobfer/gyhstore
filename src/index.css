@@ -46,6 +46,9 @@ section {
     text-transform: none!important;
 }
 
+.MuiChip-label {
+    padding: 0!important;
+}
 
 .files-ui-dropzone-children-container {
     align-items: flex-start;
