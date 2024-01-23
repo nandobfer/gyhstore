@@ -9,6 +9,7 @@ import { useIo } from "../../hooks/useIo"
 import { useCategory } from "../../hooks/useCategory"
 import { useSnackbar } from "burgos-snackbar"
 import { Close } from "@mui/icons-material"
+import { useConfirmDialog } from "burgos-confirm"
 
 interface CategoryModalProps {
     isOpen: boolean
@@ -21,6 +22,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
     const categories = useCategory()
 
     const { snackbar } = useSnackbar()
+    const { confirm } = useConfirmDialog()
 
     const [cover, setCover] = useState<File>()
     const [loading, setLoading] = useState(false)
@@ -37,7 +39,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
 
             setLoading(true)
             console.log(values)
-            io.emit("gyh:category:new", values)
+            io.emit(current_category ? "gyh:category:update" : "gyh:category:new", values, current_category?.id)
         },
         enableReinitialize: true
     })
@@ -52,6 +54,16 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
         setLoading(false)
         setCover(undefined)
         formik.resetForm()
+    }
+
+    const onDelete = () => {
+        confirm({
+            title: "deletar categoria",
+            content: "tem certeza que deseja deletar a categoria?",
+            onConfirm: () => {
+                io.emit("gyh:category:delete", current_category?.id)
+            }
+        })
     }
 
     useEffect(() => {
@@ -117,7 +129,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
                         />
                         <Box sx={{ width: "100%", flexDirection: "row", gap: "5vw" }}>
                             {current_category && (
-                                <Button variant="outlined" color="secondary">
+                                <Button variant="outlined" color="secondary" onClick={onDelete}>
                                     deletar
                                 </Button>
                             )}
