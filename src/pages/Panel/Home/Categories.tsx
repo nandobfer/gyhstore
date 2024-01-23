@@ -39,7 +39,7 @@ export const Categories: React.FC<CategoriesProps> = ({}) => {
                         //style={{borderRadius: "3vw"}}
                     >
                         {category.products.map((product) => (
-                            <Box key={product.id} sx={{ position: "relative" }}>
+                            <Box key={product.id} sx={{ position: "relative" }} onClick={() => onProductClick(product)}>
                                 <Avatar
                                     variant="rounded"
                                     src={getImageUrl(product.cover)}
@@ -55,7 +55,6 @@ export const Categories: React.FC<CategoriesProps> = ({}) => {
                                         padding: "7vw"
                                     }}>
                                     <Button
-                                        onClick={() => onProductClick(product)}
                                         variant="contained"
                                         color="secondary"
                                         sx={{
@@ -67,7 +66,6 @@ export const Categories: React.FC<CategoriesProps> = ({}) => {
                                         {product.name}
                                     </Button>
                                     <Button
-                                        onClick={() => onProductClick(product)}
                                         variant="contained"
                                         color="success"
                                         sx={{
