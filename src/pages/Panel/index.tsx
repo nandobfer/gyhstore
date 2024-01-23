@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { Autocomplete, Box, Button, Tab, Tabs } from "@mui/material"
+import { Autocomplete, Box, Button, IconButton, Tab, Tabs } from "@mui/material"
 import { useUser } from "../../hooks/useUser"
 import { TextField } from "../../components/TextField"
 import { ProductModal } from "./ProductModal"
 import { Logo } from "../../components/Logo"
 import { useProduct } from "../../hooks/useProduct"
 import { ProductContainer } from "./ProductContainer"
-import { Search } from "@mui/icons-material"
+import { List, Search } from "@mui/icons-material"
 import { useCategory } from "../../hooks/useCategory"
 import { CategoryModal } from "./CategoryModal"
 import { CategoryContainer } from "./CategoryContainer"
@@ -81,7 +81,22 @@ export const Panel: React.FC<PanelProps> = ({}) => {
             <Logo size="25vw" />
             {currentTab == 0 && (
                 <Box sx={{ gap: "5vw", width: "100%" }}>
-                    <TextField fullWidth label="produto" variant="standard" onChange={onProductSearch} InputProps={{ endAdornment: <Search /> }} />
+                    <TextField
+                        fullWidth
+                        label="produto"
+                        variant="standard"
+                        onChange={onProductSearch}
+                        InputProps={{
+                            endAdornment: (
+                                <Box sx={{ gap: "2vw", flexDirection: "row" }}>
+                                    <Search />
+                                    <List onClick={() => alert()} />
+                                    {/* <IconButton color="primary">
+                                    </IconButton> */}
+                                </Box>
+                            )
+                        }}
+                    />
                     <Button variant="outlined" sx={{ borderStyle: "dashed" }} onClick={onNewProductClick} fullWidth>
                         novo produto
                     </Button>
