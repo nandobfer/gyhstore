@@ -10,6 +10,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { CurrencyText } from "../../components/CurrencyText"
 import { useCategory } from "../../hooks/useCategory"
 import { Similar } from "./Similar"
+import { useSnackbar } from "burgos-snackbar"
 
 interface ProductPageProps {}
 
@@ -17,6 +18,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
     const id_param = useParams().id
     const products = useProduct()
     const categories = useCategory()
+    const { snackbar } = useSnackbar()
 
     if (!id_param || !Number(id_param)) {
         return <Wildcard />
@@ -29,6 +31,10 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
 
     const images = [getImageUrl(product.cover), ...product.images.map((image) => getImageUrl(image.url))]
     const border = { paddingBottom: "1vw", borderBottomLeftRadius: "5vw", borderBottomRightRadius: "5vw", borderBottom: "1px solid" }
+
+    const onAddToCart = () => {
+        snackbar({ severity: "info", text: "vou fazer ainda carai" })
+    }
 
     return (
         <Box sx={{ padding: "5vw 0", alignItems: "center", gap: "5vw", height: "100vh", overflowY: "auto", overflowX: "hidden" }}>
@@ -66,7 +72,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
                 </Carousel>
                 <Box sx={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                     <CurrencyText value={product.price} style={{ fontWeight: "bold", fontSize: "1.5rem" }} />
-                    <Button variant="outlined" color="success">
+                    <Button variant="outlined" color="success" onClick={onAddToCart}>
                         adicionar ao carrinho
                     </Button>
                 </Box>
@@ -77,7 +83,10 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
                         paddingTop: "5vw",
                         borderTopLeftRadius: "5vw",
                         borderTopRightRadius: "5vw",
-                        borderTop: "1px solid"
+                        borderTop: "1px solid",
+                        borderBottom: "1px solid",
+                        borderBottomLeftRadius: "5vw",
+                        borderBottomRightRadius: "5vw"
                     }}>
                     <pre style={{ width: "100%", textAlign: "justify" }}>{product.description}</pre>
                 </Box>
@@ -86,12 +95,6 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
             <Box sx={{ gap: "3vw", alignItems: "center" }}>
                 <Box
                     sx={{
-                        padding: "0 5vw",
-                        paddingTop: "5vw",
-                        borderTopLeftRadius: "5vw",
-                        borderTopRightRadius: "5vw",
-                        borderTop: "1px solid",
-                        width: "90vw",
                         textAlign: "center"
                     }}>
                     mesma categoria

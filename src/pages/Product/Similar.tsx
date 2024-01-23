@@ -2,14 +2,17 @@ import React from "react"
 import { Avatar, Box, Button, MenuItem } from "@mui/material"
 import { getImageUrl } from "../../tools/getImageUrl"
 import { CurrencyText } from "../../components/CurrencyText"
+import { useNavigate } from "react-router-dom"
 
 interface SimilarProps {
     product: Product
 }
 
 export const Similar: React.FC<SimilarProps> = ({ product }) => {
+    const navigate = useNavigate()
+
     return (
-        <MenuItem sx={{ position: "relative", width: "40vw" }}>
+        <MenuItem sx={{ position: "relative", width: "40vw" }} onClick={() => navigate(`/product/${product.id}`)}>
             <Avatar variant="rounded" src={getImageUrl(product.cover)} sx={{ width: "40vw", height: "100%", aspectRatio: "1/1" }} />
             <Box sx={{ position: "absolute", width: "100%", height: "100%", alignItems: "center", padding: "3vw", justifyContent: "space-between" }}>
                 <Button
