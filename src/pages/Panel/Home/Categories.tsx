@@ -5,11 +5,16 @@ import { Carousel } from "react-responsive-carousel"
 import { getImageUrl } from "../../../tools/getImageUrl"
 import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { CurrencyText } from "../../../components/CurrencyText"
+import { useNavigate } from "react-router-dom"
 
 interface CategoriesProps {}
 
 export const Categories: React.FC<CategoriesProps> = ({}) => {
     const categories = useCategory()
+    const navigate = useNavigate()
+    const onProductClick = (product: Product) => {
+        navigate(`/product/${product.id}`)
+    }
 
     return (
         <Box sx={{ gap: "5vw" }}>
@@ -50,6 +55,7 @@ export const Categories: React.FC<CategoriesProps> = ({}) => {
                                         padding: "7vw"
                                     }}>
                                     <Button
+                                        onClick={() => onProductClick(product)}
                                         variant="contained"
                                         color="secondary"
                                         sx={{
@@ -61,6 +67,7 @@ export const Categories: React.FC<CategoriesProps> = ({}) => {
                                         {product.name}
                                     </Button>
                                     <Button
+                                        onClick={() => onProductClick(product)}
                                         variant="contained"
                                         color="success"
                                         sx={{

@@ -11,6 +11,7 @@ export const Wildcard: React.FC<WildcardProps> = ({}) => {
     return (
         <Box sx={{ padding: "10vw", alignItems: "center", gap: "5vw" }}>
             <Logo />
+            <Box sx={{ fontSize: "3rem" }}>404</Box>
             <Box sx={{ fontSize: "1.5rem" }}>página não encontrada</Box>
             <Button variant="outlined" onClick={() => navigate("/")}>
                 ir para o inicio
