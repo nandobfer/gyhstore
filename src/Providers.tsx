@@ -23,13 +23,13 @@ export const Providers: React.FC<ProvidersProps> = ({ children }) => {
                 <SnackbarProvider>
                     <ConfirmDialogProvider>
                         <IoProvider>
-                            <MenuProvider>
-                                <UserProvider>
-                                    <ProductProvider>
-                                        <CategoryProvider>{children}</CategoryProvider>
-                                    </ProductProvider>
-                                </UserProvider>
-                            </MenuProvider>
+                            <UserProvider>
+                                <ProductProvider>
+                                    <CategoryProvider>
+                                        <MenuProvider>{children}</MenuProvider>
+                                    </CategoryProvider>
+                                </ProductProvider>
+                            </UserProvider>
                         </IoProvider>
                     </ConfirmDialogProvider>
                 </SnackbarProvider>
