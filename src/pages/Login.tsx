@@ -29,21 +29,23 @@ export const Login: React.FC<LoginProps> = ({}) => {
             password: ""
         },
         onSubmit: (values) => {
+            if (loading) return
             console.log(values)
+            setLoading(true)
             io.emit("gyh:login", values)
         }
     })
 
     useEffect(() => {
         io.on("gyh:login", (user: User | null) => {
+            setLoading(false)
             if (!user) {
                 snackbar({ severity: "error", text: "usuário ou senha inválidos" })
                 return
             }
 
             setUser(user)
-            navigate('/panel')
-
+            navigate("/panel")
         })
         return () => {
             io.off("gyh:login")
