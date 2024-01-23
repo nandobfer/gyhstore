@@ -73,6 +73,12 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
             close()
         })
 
+        io.on("gyh:category:update:success", (category) => {
+            categories.update(category)
+            snackbar({ severity: "info", text: "categoria atualizada" })
+            close()
+        })
+
         io.on("gyh:category:delete:success", (category) => {
             categories.remove(category)
             snackbar({ severity: "warning", text: "categoria deletada" })
@@ -89,11 +95,18 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
             setLoading(false)
         })
 
+        io.on("gyh:category:update:error", (error) => {
+            snackbar({ severity: "error", text: "erro ao atualizar categoria" })
+            setLoading(false)
+        })
+
         return () => {
             io.off("gyh:category:new:success")
             io.off("gyh:category:new:error")
             io.off("gyh:category:delete:success")
             io.off("gyh:category:delete:error")
+            io.off("gyh:category:update:success")
+            io.off("gyh:category:update:error")
         }
     }, [])
 
