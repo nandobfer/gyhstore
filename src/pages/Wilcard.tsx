@@ -9,7 +9,7 @@ export const Wildcard: React.FC<WildcardProps> = ({}) => {
     const navigate = useNavigate()
 
     return (
-        <Box sx={{ padding: "10vw", alignItems: "center", gap: "5vw" }}>
+        <Box sx={{ padding: "10vw", alignItems: "center", gap: "5vw", height: "100vh" }}>
             <Logo />
             <Box sx={{ fontSize: "3rem" }}>404</Box>
             <Box sx={{ fontSize: "1.5rem" }}>página não encontrada</Box>
