@@ -22,6 +22,7 @@ export const ProductProvider:React.FC<ProductProviderProps> = ({children}) => {
 
     const update = (product: Product) => {
         setList(list => [...list.filter(item => item.id != product.id), product])
+        console.log({ updating_product: product })
     }
 
     const remove = (product: Product) => {

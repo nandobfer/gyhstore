@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react"
 import React from "react"
 import { useIo } from "../hooks/useIo"
+import { useProduct } from "../hooks/useProduct"
 
 interface CategoryContextValue {
     list: Category[]
@@ -19,10 +20,16 @@ export default CategoryContext
 
 export const CategoryProvider: React.FC<CategoryProviderProps> = ({ children }) => {
     const io = useIo()
+    const products = useProduct()
+
     const [list, setList] = useState<Category[]>([])
 
     const update = (category: Category) => {
         setList((list) => [...list.filter((item) => item.id != category.id), category])
+        const category_products = products.list.filter((product) => product.categories.find((item) => item.id == category.id))
+        category_products.map((product) => {
+            products.update({ ...product, categories: [...product.categories.filter((item) => item.id != category.id), category] })
+        })
     }
 
     const remove = (category: Category) => {
