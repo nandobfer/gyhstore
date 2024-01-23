@@ -77,8 +77,12 @@ export const Panel: React.FC<PanelProps> = ({}) => {
     }, [category.list])
 
     return (
-        <Box sx={{ padding: "10vw", paddingTop: "5vw", paddingBottom: "10vw", alignItems: "center" }}>
+        <Box sx={{ padding: "10vw", paddingTop: "5vw", paddingBottom: "10vw", alignItems: "center", height: "100vh", overflowY: "auto" }}>
             <Logo size="25vw" />
+            <Tabs variant="fullWidth" sx={{ width: "100%" }} value={currentTab} onChange={(_, value) => setCurrentTab(value)}>
+                <Tab label="produtos" value={0} />
+                <Tab label="categorias" value={1} />
+            </Tabs>
             {currentTab == 0 && (
                 <Box sx={{ gap: "5vw", width: "100%" }}>
                     <TextField
@@ -127,14 +131,6 @@ export const Panel: React.FC<PanelProps> = ({}) => {
 
             <ProductModal isOpen={openProductModal} close={closeProductModal} current_product={currentProduct} />
             <CategoryModal isOpen={openCategoryModal} onClose={closeCategoryModal} current_category={currentCategory} />
-            <Tabs
-                variant="fullWidth"
-                sx={{ width: "100%", position: "absolute", bottom: 0 }}
-                value={currentTab}
-                onChange={(_, value) => setCurrentTab(value)}>
-                <Tab label="produtos" value={0} />
-                <Tab label="categorias" value={1} />
-            </Tabs>
         </Box>
     )
 }

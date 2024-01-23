@@ -44,7 +44,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
                     sx={{
                         width: "100%",
                         textAlign: "center",
-                        padding: "5vw",
+                        padding: "0 5vw",
                         fontWeight: "bold",
                         fontSize: "1.2rem",
                         ...border

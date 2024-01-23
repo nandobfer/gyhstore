@@ -41,7 +41,7 @@ export const ProductContainer: React.FC<ProductContainerProps> = ({ product, onC
                                     label={category.name}
                                     key={category.id}
                                     color="secondary"
-                                    sx={{ width: "max-content", fontSize: "0.7rem", padding: "1vw 2vw", height: "max-content" }}
+                                    sx={{ width: "max-content", fontSize: "0.6rem", padding: "0.5vw 1vw", height: "max-content" }}
                                 />
                             ))}
                     </Box>
@@ -50,7 +50,7 @@ export const ProductContainer: React.FC<ProductContainerProps> = ({ product, onC
                     {product.description.split("\n")[0]}
                 </Box> */}
                     <Box sx={{ flexDirection: "row", justifyContent: "space-between", width: "100%", marginTop: "auto", alignItems: "center" }}>
-                        <Button variant="outlined" color="success">
+                        <Button variant="outlined" color="success" sx={{ padding: "1vw", fontSize: "0.75rem" }}>
                             <CurrencyText value={product.price} style={{ fontWeight: "bold", color: colors.success }} />
                         </Button>
                         <Box sx={{ fontSize: "0.6rem", color: "secondary.main" }}>{product.code}B</Box>

@@ -1,2 +1,2 @@
-// export const url = "s://agencyboz.com:4103"
-export const url = "://localhost:4103"
+export const url = "s://nandoburgos.dev:4103"
+// export const url = "://localhost:4103"

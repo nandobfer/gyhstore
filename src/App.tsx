@@ -9,7 +9,7 @@ import { Header } from "./components/Header"
 const App: React.FC = () => {
     return (
         <Providers>
-            <Paper sx={{ width: '100%', height: '100%', flexDirection: 'column' }}>
+            <Paper sx={{ width: "100vw", height: "--webkit", flexDirection: "column", borderRadius: 0 }}>
                 <Header />
                 <Routes />
             </Paper>

@@ -169,7 +169,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, close, curre
             PaperProps={{
                 sx: {
                     minWidth: "90vw",
-                    height: "70vh"
+                    minHeight: "70vh"
                 }
             }}>
             <IconButton sx={{ position: "absolute", right: "3vw", top: "3vw" }} color="secondary" onClick={onClose}>

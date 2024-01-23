@@ -53,7 +53,7 @@ export const Login: React.FC<LoginProps> = ({}) => {
     })
 
     return (
-        <Box sx={{ width: "100%", height: "100%", padding: "10vw", alignItems: "center", gap: "5vw" }}>
+        <Box sx={{ width: "100%", height: "100vh", padding: "10vw", alignItems: "center", gap: "5vw" }}>
             <Logo />
             <Form onSubmit={formik.handleSubmit} sx={{ width: "100%", gap: "5vw" }}>
                 <TextField label="usuário" value={formik.values.login} name="login" onChange={formik.handleChange} autoComplete="off" required />
