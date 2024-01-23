@@ -66,8 +66,8 @@ export const useMenuList = () => {
                 submenus: categories.list?.map((category) => ({
                     id: category.id,
                     name: category.name,
-                    onClick: () => {},
-                    path: "/aa",
+                    onClick: () => navigate(`/category/${category.id}`),
+                    path: `/category/${category.id}`,
                     icon: <Avatar src={getImageUrl(category.cover)} sx={{ width: "7vw", height: "100%", aspectRatio: "1/1", marginRight: "2vw" }} />
                 }))
             }

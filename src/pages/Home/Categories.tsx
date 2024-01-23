@@ -1,10 +1,10 @@
 import React from "react"
 import { Avatar, Box, Button } from "@mui/material"
-import { useCategory } from "../../../hooks/useCategory"
+import { useCategory } from "../../hooks/useCategory"
 import { Carousel } from "react-responsive-carousel"
-import { getImageUrl } from "../../../tools/getImageUrl"
+import { getImageUrl } from "../../tools/getImageUrl"
 import "react-responsive-carousel/lib/styles/carousel.min.css"
-import { CurrencyText } from "../../../components/CurrencyText"
+import { CurrencyText } from "../../components/CurrencyText"
 import { useNavigate } from "react-router-dom"
 
 interface CategoriesProps {}
