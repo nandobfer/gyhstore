@@ -9,7 +9,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
     return (
         <Box sx={{ width: "100%", height: "100vh", padding: "10vw", alignItems: "center", overflowY: "auto", gap: "5vw" }}>
             <Logo />
-            <Categories />
+            {/* <Categories /> */}
         </Box>
     )
 }
