@@ -96,7 +96,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
                     }}>
                     mesma categoria
                 </Box>
-                <Box sx={{ display: "contents" }}>
+                <Box sx={{ flexDirection: "row", width: "100vw", overflowX: "auto", paddingLeft: "5vw", paddingRight: "10vw", gap: "3vw" }}>
                     {categories.list
                         .filter((category) => product.categories.find((item) => item.id == category.id))
                         .map((category) => (
@@ -104,11 +104,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({}) => {
                                 key={category.id}
                                 sx={{
                                     flexDirection: "row",
-                                    width: "100vw",
-                                    overflowX: "auto",
-                                    gap: "3vw",
-                                    paddingLeft: "5vw",
-                                    paddingRight: "10vw"
+                                    gap: "3vw"
                                 }}>
                                 {category.products.map((product) => (
                                     <Similar key={product.id} product={product} />
